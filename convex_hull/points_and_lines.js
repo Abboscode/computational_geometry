@@ -39,8 +39,8 @@ export class vector2Doperations{
 
     }
 
-    static crossProduct(p1,p2){
-        return p1.x * p2.y - p1.y * p2.x;
+    static crossProduct(v1,v2){
+        return v1.x * v2.y - v1.y * v2.x;
 
     }
     
