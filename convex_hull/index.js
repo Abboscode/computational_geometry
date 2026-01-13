@@ -21,7 +21,7 @@ const upperHull = [];
             const v1={ x: p2.x - p1.x, y: p2.y - p1.y};
             const v2={ x: p3.x - p2.x, y: p3.y - p2.y};
 
-                        if (vector2Doperations.crossProduct( v1,v2) <= 0) {
+                        if (vector2Doperations.crossProduct( v1,v2) < 0) {
                 upperHull.pop();
             }else{
                 break;
@@ -37,14 +37,14 @@ const upperHull = [];
 
 const lowerHull=[];
     for(let i=nails.length -1;i>=0;i--){
-        nails[i].x+=0.5;
+    ;
         while(lowerHull.length>=2){
             const p1 = lowerHull[lowerHull.length - 2];
             const p2 = lowerHull[lowerHull.length - 1];
             const p3 = nails[i];
             const v1={ x: p2.x - p1.x, y: p2.y - p1.y};
             const v2={ x: p3.x - p2.x, y: p3.y - p2.y};
-            if( vector2Doperations.crossProduct( v1,v2) <= 0){
+            if( vector2Doperations.crossProduct( v1,v2) < 0){
                 lowerHull.pop();
             }else{
                 break;
@@ -60,14 +60,9 @@ return [...upperHull,...lowerHull];
 }
 
 
-function draw() {
 
-    if (!canvas) return; // Safety check
-    const ctx = canvas.getContext("2d");
-
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    const nails = [];
+function intit(){
+ const nails = [];
  while (nails.length < NAIL_COUNT) {
         // Generate coordinates across the whole canvas
         const x = Math.random() * canvas.width;
@@ -86,7 +81,19 @@ function draw() {
   
 
     const hull =buildHull(nails);
+    return {nails,hull};
 
+
+}
+function draw() {
+
+    if (!canvas) return; // Safety check
+    const ctx = canvas.getContext("2d");
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    const {nails,hull} = intit();
+ 
 
     ctx.fillStyle = "black";
     ctx.strokeStyle = "red";
