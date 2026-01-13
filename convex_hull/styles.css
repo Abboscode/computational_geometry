@@ -1,6 +1,7 @@
-canvas {
+#canvas {
     border: 1px solid black;
     width: 800px;
     height: 600px;
-    display: block;
+   
+     image-rendering: pixelated;
 }

@@ -1,4 +1,6 @@
-class Point{
+
+
+ export class Point{
 
     constructor(x,y){
         this.x=x;
@@ -9,8 +11,15 @@ class Point{
 
 
 }
+export class Nail{
+    constructor(x,y){
+        this.x=x;
+        this.y=y;
 
-class Line{
+    }
+}
+
+export class Line{
 
     constructor( p1,p2){
         this.p1=p1;
@@ -21,7 +30,7 @@ class Line{
 
 }
 
-class vector2Doperations{
+export class vector2Doperations{
 
 
     static subtract(p1,p2){
