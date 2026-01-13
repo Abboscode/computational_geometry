@@ -7,6 +7,59 @@ const center = { x: 400, y: 400 };
 const radius = 200;
 const BOUND_X = Math.cos(Math.PI) + center.x;
 const BOUND_Y = Math.sin(Math.PI) + center.y;
+
+
+function buildHull(nails){
+const upperHull = [];
+ for (let i = 0; i < nails.length; i++) {
+        
+        while (upperHull.length >= 2) {
+            const p1 = upperHull[upperHull.length - 2];
+            const p2 = upperHull[upperHull.length - 1];
+            const p3 = nails[i];
+
+            const v1={ x: p2.x - p1.x, y: p2.y - p1.y};
+            const v2={ x: p3.x - p2.x, y: p3.y - p2.y};
+
+                        if (vector2Doperations.crossProduct( v1,v2) <= 0) {
+                upperHull.pop();
+            }else{
+                break;
+            }
+
+        }
+        upperHull.push(nails[i]);
+
+              
+
+
+    }
+
+const lowerHull=[];
+    for(let i=nails.length -1;i>=0;i--){
+        nails[i].x+=0.5;
+        while(lowerHull.length>=2){
+            const p1 = lowerHull[lowerHull.length - 2];
+            const p2 = lowerHull[lowerHull.length - 1];
+            const p3 = nails[i];
+            const v1={ x: p2.x - p1.x, y: p2.y - p1.y};
+            const v2={ x: p3.x - p2.x, y: p3.y - p2.y};
+            if( vector2Doperations.crossProduct( v1,v2) <= 0){
+                lowerHull.pop();
+            }else{
+                break;
+            }
+
+    }
+    lowerHull.push(nails[i]);
+    }
+
+
+return [...upperHull,...lowerHull];
+
+}
+
+
 function draw() {
 
     if (!canvas) return; // Safety check
@@ -30,54 +83,16 @@ function draw() {
     }
 
     nails.sort((a, b) => a.x -b.x|| a.y - b.y);
-   const  upperHull = [];
-    const lowerHull = [];
+  
 
-    for (let i = 0; i < nails.length; i++) {
-        
-        while (upperHull.length >= 2) {
-            const p1 = upperHull[upperHull.length - 2];
-            const p2 = upperHull[upperHull.length - 1];
-            const p3 = nails[i];
-
-            const v1={ x: p2.x - p1.x, y: p2.y - p1.y};
-            const v2={ x: p3.x - p2.x, y: p3.y - p2.y};
-
-                        if (vector2Doperations.crossProduct( v1,v2) <= 0) {
-                upperHull.pop();
-            }else{
-                break;
-            }
-
-        }
-        upperHull.push(nails[i]);
-
-              
-
-
-    }
-    // for (let i = nails.length - 1; i > 2; i--) {
-
-
-    //     const vector1 = { x: nails[i -1].x - nails[i].x, y: nails[i - 1].y - nails[i].y };
-    //     const vector2 = { x: nails[i-2].x - nails[i - 1].x, y: nails[i-2].y - nails[i - 1].y };
-    //     const orientation = vector2Doperations.crossProduct(vector1, vector2);
-
-    //     if (orientation > 0) {
-    //        upperHull.push(nails[i-2]);
-    //         upperHull.push(nails[i-1]);
-    //         upperHull.push(nails[i]);
-    //     }
-
-
-    // }
+    const hull =buildHull(nails);
 
 
     ctx.fillStyle = "black";
     ctx.strokeStyle = "red";
 
     nails.forEach((nail) => {
-        if(upperHull.includes(nail)){
+        if(hull.includes(nail)){
             ctx.fillStyle = "red";
         }else{
             ctx.fillStyle = "black";
@@ -85,6 +100,16 @@ function draw() {
         ctx.strokeRect(nail.x + 100, nail.y + 100, 9, 9);
         ctx.fillRect(nail.x + 100, nail.y + 100, 9, 9);
     });
+    // Draw the line for the Upper Hull
+    ctx.strokeStyle = "red";
+    ctx.beginPath();
+    ctx.moveTo(hull[0].x+100, hull[0].y+100);
+    for(let i = 1; i < hull.length; i++) {
+        ctx.lineTo(hull[i].x+100, hull[i].y+100);
+    }
+    ctx.stroke();
+
+
 }
 
 draw();
